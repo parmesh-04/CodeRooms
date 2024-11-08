@@ -1,5 +1,5 @@
 const User=require("../schema/userModel");
-//const Errorhandler = require("../utils/errorHandler");
+const Errorhandler = require("../utils/errorHandler");
 //const{sendEmail}=require("../middleware/sendEmail")
 const crypto=require("crypto")
 
@@ -34,36 +34,7 @@ exports.registerUser=async(req,res,next)=>{
     }
 }
 
-exports.getRating=async(req,res,next)=>{
-    try {
-        // Retrieve the username from the request or database
-        const user = await User.findById(req.user.id);  // Assuming `req.user` contains the authenticated user's ID
-        const username = user.leetcodeUsername;  // or replace with the actual field storing the username
 
-        if (!username) {
-            return next(new Errorhandler("Username not found", 400));
-        }
-
-        // Fetch rating from the LeetCode API
-        const response = await fetch(`https://alfa-leetcode-api.onrender.com/userContestRankingInfo/${username}`);
-        const ratingData = await response.json();
-
-        if (ratingData.errors && ratingData.errors.length > 0) {
-            return next(new Errorhandler("Unable to retrieve rating", 400));
-        }
-
-        res.status(200).json({
-            success: true,
-            rating: ratingData.rating,  // Adjust based on actual API response structure
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
-    
-}
 
 
 exports.loginUser=async(req,res,next)=>{

@@ -5,24 +5,12 @@ const crypto=require("crypto")
 const validator=require("validator");
 
 const userSchema=new mongoose.Schema({
-    name:{
-        type:String,
-        required:[true,"Please Enter your name"],
-        maxlength:[30,"Name cannot exceed 30 characters"],
-        minLength:[3,"Name should have at least 3 characters"]
-    },
-    email:{
-        type:String,
-        required:[true,"Please Enter your name"],
-        unique:true,
-        validate:[validator.isEmail,"Plaease enter Valid Email"]
-    },
-    password:{
-        type:String,
-        required:[true,"Please enter your Password"],
-        minLength:[8,"Password should exceed 8 caharacters"]
-     
-    }
+    leetcodeUsername: { type: String, unique: true, required: true },
+    password: { type: String, required: true }, 
+    score: { type: Number, default: 0 },
+    totalMatches: { type: Number, default: 0 },
+    wins: { type: Number, default: 0 },
+    losses: { type: Number, default: 0 },
 })
 
 
@@ -52,5 +40,7 @@ userSchema.pre("save",async function(next){
         this.resetPasswordExpire=Date.now()+10*60*1000;
         return resetToken;
     }
+
+    
     
     module.exports=mongoose.model("User",userSchema);
